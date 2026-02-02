@@ -46,12 +46,22 @@ def text_node_to_html_node(text_node):
 
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):  
+    new_nodes = []
     delimiters = {
         '*': TextType.BOLD, 
         '_': TextType.ITALIC, 
         '`': TextType.CODE
     }
+
+    for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+        # if delimeter is either at start or end of text, text is split in two
+        # otherwise, text is split in three
     
-    nodes = old_nodes.split(delimiter)
-    new_nodes = []
-    if old_nodes.text.startswith(delimiter) or old_nodes.text.endswith(delimiter):
+
+text = '*test'
+texts = ['', '*', '', 'test']
+
+print(text.split('*'))
+print(''.join(texts))
