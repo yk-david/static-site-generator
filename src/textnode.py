@@ -56,12 +56,10 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
-        # if delimeter is either at start or end of text, text is split in two
-        # otherwise, text is split in three
-    
-
-text = '*test'
-texts = ['', '*', '', 'test']
-
-print(text.split('*'))
-print(''.join(texts))
+        if node.text_type == TextType.TEXT:
+            first_delimiter_index = node.text.find(delimiter)
+            second_delimiter_index = node.text.find(delimiter, first_delimiter_index+1)
+            new_nodes.append(TextNode(node.text[:first_delimiter_index], TextType.TEXT))
+            new_nodes.append(TextNode(node.text[first_delimiter_index+1:second_delimiter_index], text_type))
+            new_nodes.append(TextNode(node.text[second_delimiter_index+1:], TextType.TEXT))
+            
