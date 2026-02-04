@@ -47,19 +47,24 @@ def text_node_to_html_node(text_node):
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):  
     new_nodes = []
-    delimiters = {
-        '*': TextType.BOLD, 
-        '_': TextType.ITALIC, 
-        '`': TextType.CODE
-    }
 
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
         if node.text_type == TextType.TEXT:
+            delimiter_pair_count = node.text.count(delimiter)
+
+            if delimiter_pair_count % 2 != 0:
+                raise Exception('invalid markdown')
+            
             first_delimiter_index = node.text.find(delimiter)
             second_delimiter_index = node.text.find(delimiter, first_delimiter_index+1)
+            
             new_nodes.append(TextNode(node.text[:first_delimiter_index], TextType.TEXT))
             new_nodes.append(TextNode(node.text[first_delimiter_index+1:second_delimiter_index], text_type))
             new_nodes.append(TextNode(node.text[second_delimiter_index+1:], TextType.TEXT))
             
+text_starting_with_delimiter = "`code block` word"
+delimiter = "`"
+parts = text_starting_with_delimiter.split(delimiter)
+print(parts)
