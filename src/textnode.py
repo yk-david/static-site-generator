@@ -57,14 +57,12 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             if delimiter_pair_count % 2 != 0:
                 raise Exception('invalid markdown')
             
-            first_delimiter_index = node.text.find(delimiter)
-            second_delimiter_index = node.text.find(delimiter, first_delimiter_index+1)
+            split_texts = node.text.split(delimiter)
             
-            new_nodes.append(TextNode(node.text[:first_delimiter_index], TextType.TEXT))
-            new_nodes.append(TextNode(node.text[first_delimiter_index+1:second_delimiter_index], text_type))
-            new_nodes.append(TextNode(node.text[second_delimiter_index+1:], TextType.TEXT))
-            
-text_starting_with_delimiter = "`code block` word"
-delimiter = "`"
-parts = text_starting_with_delimiter.split(delimiter)
-print(parts)
+            for i in range(0, len(split_texts)):
+                if i % 2 == 0:
+                    new_nodes.append(TextNode(split_texts[i], TextType.TEXT))
+                else:
+                    new_nodes.append(TextNode(split_texts[i], text_type))
+
+    return new_nodes
