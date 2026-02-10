@@ -66,3 +66,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     new_nodes.append(TextNode(split_texts[i], text_type))
 
     return new_nodes
+
+
+def split_nodes_image(old_nodes):
+    pass
+
+
+def split_nodes_link(old_nodes):
+    pass

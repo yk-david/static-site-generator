@@ -9,13 +9,11 @@ class TestMarkdown(unittest.TestCase):
         )
         self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
 
-
     def test_extract_markdown_links(self):
         matches = extract_markdown_links(
             'Search on [Google](https://www.google.com)'
         )
         self.assertListEqual([('Google', 'https://www.google.com')], matches)
-
     
     def test_extract_markdown_icons(self):
         matches = extract_markdown_images(
