@@ -1,5 +1,6 @@
-from htmlnode import LeafNode
 from enum import Enum
+from htmlnode import LeafNode
+from extract_markdown import *
 
 
 class TextType(Enum):
@@ -69,8 +70,27 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
 
 def split_nodes_image(old_nodes):
-    pass
+    new_nodes = []
+
+    # for node in old_nodes:
 
 
-def split_nodes_link(old_nodes):
-    pass
+
+def split_nodes_link(old_nodes): # `old_nodes` is a list of single or multiple TextNode`
+    
+    if markdown_links_tuples is None:
+        return [old_nodes]
+    new_nodes = []
+
+    for node in old_nodes:
+        markdown_links_tuples = extract_markdown_links(node)
+        if markdown_links_tuples is None:
+            new_nodes.append(node)
+        else:
+            
+    
+
+
+
+
+# [('to boot dev', 'https://www.boot.dev'), ('to youtube', 'https://www.youtube.com/@bootdotdev')]
