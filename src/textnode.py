@@ -77,20 +77,28 @@ def split_nodes_image(old_nodes):
 
 
 def split_nodes_link(old_nodes): # `old_nodes` is a list of single or multiple TextNode`
-    
-    if markdown_links_tuples is None:
-        return [old_nodes]
     new_nodes = []
 
     for node in old_nodes:
-        markdown_links_tuples = extract_markdown_links(node)
-        if markdown_links_tuples is None:
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+        markdown_links_tuples = extract_markdown_links(node.text)
+        if markdown_links_tuples == []:
             new_nodes.append(node)
         else:
-            
+            current_text = node.text
+            for link in markdown_links_tuples:
+                sections = current_text.split(f'[{link[0]}]({link[1]})', 1)
+                if sections[0] != '': 
+                    new_nodes.append(TextNode(sections[0], TextType.TEXT))
+                new_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
+                current_text = sections[1]
+            if current_text != '':
+                new_nodes.append(TextNode(current_text, TextType.TEXT))
+
+    return new_nodes
     
-
-
 
 
 # [('to boot dev', 'https://www.boot.dev'), ('to youtube', 'https://www.youtube.com/@bootdotdev')]
