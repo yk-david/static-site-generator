@@ -81,11 +81,11 @@ def split_nodes_image(old_nodes):
             new_nodes.append(node)
         else:
             current_text = node.text
-            for image in extract_markdown_images:
+            for image in markdown_images_tuples:
                 sections = current_text.split(f'![{image[0]}]({image[1]})', 1)
                 if sections[0] != '':
                     new_nodes.append(TextNode(sections[0], TextType.TEXT))
-                new_nodes.append(TextType(image[0], TextType.IMAGE, image[1]))
+                new_nodes.append(TextNode(image[0], TextType.IMAGE, image[1]))
                 current_text = sections[1]
             if current_text != '':
                 new_nodes.append(TextNode(current_text, TextType.TEXT))
