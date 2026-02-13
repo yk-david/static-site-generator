@@ -134,24 +134,57 @@ class TestSplitNodes(unittest.TestCase):
         ], new_nodes)
 
 
-# class TestTextToTextNodes(unittest.TestCase):
-#     def test_bold_italic_code_image_link(self):
-#         node = TextNode(
-#             'This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)', TextType.TEXT)
-#         new_nodes = text_to_textnodes(node)
-#         self.assertListEqual([
-#             TextNode("This is ", TextType.TEXT),
-#             TextNode("text", TextType.BOLD),
-#             TextNode(" with an ", TextType.TEXT),
-#             TextNode("italic", TextType.ITALIC),
-#             TextNode(" word and a ", TextType.TEXT),
-#             TextNode("code block", TextType.CODE),
-#             TextNode(" and an ", TextType.TEXT),
-#             TextNode("obi wan image", TextType.IMAGE,
-#                      "https://i.imgur.com/fJRm4Vk.jpeg"),
-#             TextNode(" and a ", TextType.TEXT),
-#             TextNode("link", TextType.LINK, "https://boot.dev"),
-#         ], new_nodes)
+class TestTextToTextNodes(unittest.TestCase):
+    def test_all_example(self):
+        text = 'This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)'
+        new_nodes = text_to_textnodes(text)
+        self.assertEqual([
+            TextNode("This is ", TextType.TEXT),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.TEXT),
+            TextNode("obi wan image", TextType.IMAGE,
+                     "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://boot.dev"),
+        ], new_nodes)
+
+    def test_all_python(self):
+        text = 'This is **bold text** with an _italic_ word and a `code snippet` and an ![Python logo](https://www.python.org/static/community_logos/python-logo-master-v3-TM.png) and a [link to Python](https://www.python.org)'
+        new_nodes = text_to_textnodes(text)
+        self.assertEqual([
+            TextNode('This is ', TextType.TEXT),
+            TextNode('bold text', TextType.BOLD),
+            TextNode(' with an ', TextType.TEXT),
+            TextNode('italic', TextType.ITALIC),
+            TextNode(' word and a ', TextType.TEXT),
+            TextNode('code snippet', TextType.CODE),
+            TextNode(' and an ', TextType.TEXT),
+            TextNode('Python logo', TextType.IMAGE,
+                     'https://www.python.org/static/community_logos/python-logo-master-v3-TM.png'),
+            TextNode(' and a ', TextType.TEXT),
+            TextNode('link to Python', TextType.LINK, 'https://www.python.org')
+        ], new_nodes)
+
+    def test_all_react(self):
+        text = 'Understanding **React** makes _frontend_ development easier using `<Component />` syntax with ![React logo](https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg) and explore [React.dev](https://react.dev)'
+        new_nodes = text_to_textnodes(text)
+        self.assertEqual([
+            TextNode('Understanding ', TextType.TEXT),
+            TextNode('React', TextType.BOLD),
+            TextNode(' makes ', TextType.TEXT),
+            TextNode('frontend', TextType.ITALIC),
+            TextNode(' development easier using ', TextType.TEXT),
+            TextNode('<Component />', TextType.CODE),
+            TextNode(' syntax with ', TextType.TEXT),
+            TextNode('React logo', TextType.IMAGE,
+                     'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg'),
+            TextNode(' and explore ', TextType.TEXT),
+            TextNode('React.dev', TextType.LINK, 'https://react.dev')
+        ], new_nodes)
 
 
 if __name__ == '__main__':
