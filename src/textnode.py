@@ -17,7 +17,7 @@ class TextNode:
         self.text = text
         self.text_type = text_type
         self.url = url
-    
+
     def __eq__(self, other):
         return (
             self.text == other.text
@@ -27,26 +27,26 @@ class TextNode:
 
     def __repr__(self):
         return f'TextNode({self.text}, {self.text_type}, {self.url})'
-    
+
 
 def text_node_to_html_node(text_node):
-        if text_node.text_type == TextType.TEXT:
-            return LeafNode(None, text_node.text)
-        if text_node.text_type == TextType.BOLD:
-            return LeafNode('b', text_node.text)
-        if text_node.text_type == TextType.ITALIC:
-            return LeafNode('i', text_node.text)
-        if text_node.text_type == TextType.CODE:
-            return LeafNode('code', text_node.text)
-        if text_node.text_type == TextType.LINK:
-            return LeafNode('a', text_node.text, {'href': text_node.url})
-        if text_node.text_type == TextType.IMAGE:
-            return LeafNode('img', '', {'src': text_node.url, 'alt': text_node.text})
-        
-        raise ValueError(f'invalid text type: {text_node.text_type}')
+    if text_node.text_type == TextType.TEXT:
+        return LeafNode(None, text_node.text)
+    if text_node.text_type == TextType.BOLD:
+        return LeafNode('b', text_node.text)
+    if text_node.text_type == TextType.ITALIC:
+        return LeafNode('i', text_node.text)
+    if text_node.text_type == TextType.CODE:
+        return LeafNode('code', text_node.text)
+    if text_node.text_type == TextType.LINK:
+        return LeafNode('a', text_node.text, {'href': text_node.url})
+    if text_node.text_type == TextType.IMAGE:
+        return LeafNode('img', '', {'src': text_node.url, 'alt': text_node.text})
+
+    raise ValueError(f'invalid text type: {text_node.text_type}')
 
 
-def split_nodes_delimiter(old_nodes, delimiter, text_type):  
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
 
     for node in old_nodes:
@@ -57,9 +57,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
             if delimiter_pair_count % 2 != 0:
                 raise Exception('invalid markdown')
-            
+
             split_texts = node.text.split(delimiter)
-            
+
             for i in range(0, len(split_texts)):
                 if i % 2 == 0:
                     new_nodes.append(TextNode(split_texts[i], TextType.TEXT))
@@ -72,11 +72,28 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 def split_nodes_image(old_nodes):
     new_nodes = []
 
-    # for node in old_nodes:
+    for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+        markdown_images_tuples = extract_markdown_images(node.text)
+        if markdown_images_tuples == []:
+            new_nodes.append(node)
+        else:
+            current_text = node.text
+            for image in extract_markdown_images:
+                sections = current_text.split(f'![{image[0]}]({image[1]})', 1)
+                if sections[0] != '':
+                    new_nodes.append(TextNode(sections[0], TextType.TEXT))
+                new_nodes.append(TextType(image[0], TextType.IMAGE, image[1]))
+                current_text = sections[1]
+            if current_text != '':
+                new_nodes.append(TextNode(current_text, TextType.TEXT))
+
+    return new_nodes
 
 
-
-def split_nodes_link(old_nodes): # `old_nodes` is a list of single or multiple TextNode`
+def split_nodes_link(old_nodes):
     new_nodes = []
 
     for node in old_nodes:
@@ -90,7 +107,7 @@ def split_nodes_link(old_nodes): # `old_nodes` is a list of single or multiple T
             current_text = node.text
             for link in markdown_links_tuples:
                 sections = current_text.split(f'[{link[0]}]({link[1]})', 1)
-                if sections[0] != '': 
+                if sections[0] != '':
                     new_nodes.append(TextNode(sections[0], TextType.TEXT))
                 new_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
                 current_text = sections[1]
@@ -98,7 +115,3 @@ def split_nodes_link(old_nodes): # `old_nodes` is a list of single or multiple T
                 new_nodes.append(TextNode(current_text, TextType.TEXT))
 
     return new_nodes
-    
-
-
-# [('to boot dev', 'https://www.boot.dev'), ('to youtube', 'https://www.youtube.com/@bootdotdev')]
