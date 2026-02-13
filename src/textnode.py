@@ -115,3 +115,37 @@ def split_nodes_link(old_nodes):
                 new_nodes.append(TextNode(current_text, TextType.TEXT))
 
     return new_nodes
+
+
+def text_to_textnodes(text):
+    node = TextNode(text, TextType.TEXT)
+    new_nodes = split_nodes_image(split_nodes_link([node]))
+    for node in new_nodes:
+        if node.text_type == TextType.TEXT:
+            if '**' in node.text:
+                new_nodes = split_nodes_delimiter(
+                    new_nodes, '**', TextType.BOLD)
+            if '_' in node.text:
+                new_nodes = split_nodes_delimiter(
+                    new_nodes, '_', TextType.ITALIC)
+            if '`' in node.text:
+                new_nodes = split_nodes_delimiter(
+                    new_nodes, '`', TextType.CODE)
+
+    return new_nodes
+
+
+print(text_to_textnodes(
+    'This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)'))
+
+
+# [TextNode(This is , TextType.TEXT, None),
+# TextNode(text, TextType.BOLD, None),
+# TextNode( with an , TextType.TEXT, None),
+# TextNode(italic, TextType.ITALIC, None),
+# TextNode( word and a , TextType.TEXT, None),
+# TextNode(code block, TextType.CODE, None),
+# TextNode( and an , TextType.TEXT, None),
+# TextNode(obi wan image, TextType.IMAGE, https://i.imgur.com/fJRm4Vk.jpeg),
+# TextNode( and a , TextType.TEXT, None),
+# TextNode(link, TextType.LINK, https://boot.dev)]
