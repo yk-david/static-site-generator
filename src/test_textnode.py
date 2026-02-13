@@ -119,6 +119,20 @@ class TestSplitNodes(unittest.TestCase):
         ], new_nodes
         )
 
+    def test_image_and_link(self):
+        node = TextNode(
+            'This is a ![passport](https://www.sample.com/passport). Upload yours [here](https://www.upload.com/passport) and close the tab.', TextType.TEXT)
+        image_nodes = split_nodes_image([node])
+        new_nodes = split_nodes_link(image_nodes)
+        self.assertListEqual([
+            TextNode('This is a ', TextType.TEXT),
+            TextNode('passport', TextType.IMAGE,
+                     'https://www.sample.com/passport'),
+            TextNode('. Upload yours ', TextType.TEXT),
+            TextNode('here', TextType.LINK, 'https://www.upload.com/passport'),
+            TextNode(' and close the tab.', TextType.TEXT)
+        ], new_nodes)
+
 
 if __name__ == '__main__':
     unittest.main()
