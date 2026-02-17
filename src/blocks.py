@@ -27,17 +27,12 @@ def block_to_block_type(block):
         return BlockType.QUOTE
     elif all(line.startswith('- ') for line in lines):
         return BlockType.UNORDERED_LIST
-    elif all(int(line.split(' ', 1)[0]) > 0 and line.split(' ', 1)[-1] == '.' for line in lines):
+    elif block.startswith('1. '):
+        i = 1
+        for line in lines:
+            if not line.startswith(f'{i}. '):
+                return BlockType.PARAGRAPH
+            i += 1
         return BlockType.ORDERED_LIST
 
-    # for line in lines:
-    
-    # for line in lines:
-    #     if int(block.split(' ', 1)[0][0]) > 0 and block.split(' ', 1)[0][-1] == '.':
-    #         return BlockType.ORDERED_LIST
-    #     return BlockType.PARAGRAPH
-    
     return BlockType.PARAGRAPH
-
-        
-

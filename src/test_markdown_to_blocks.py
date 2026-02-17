@@ -97,12 +97,3 @@ class TestBlockToBlockType(unittest.TestCase):
         type = block_to_block_type(block)
         self.assertEqual(type, BlockType.ORDERED_LIST)
 
-    # def test_block_to_unordered_list(self):
-    #     markdown_block = '- item1'
-    #     type = block_to_block_type(markdown_block)
-    #     self.assertEqual(type, BlockType.UNORDERED_LIST)
-    
-    # def test_block_to_ordered_list(self):
-    #     markdown_block = '3. You should buy...'
-    #     type = block_to_block_type(markdown_block)
-    #     self.assertEqual(type, BlockType.ORDERED_LIST)
