@@ -63,26 +63,46 @@ line two of same paragraph
 
 class TestBlockToBlockType(unittest.TestCase):
     def test_block_to_heading(self):
-        markdown_block = '# This lesson is about Block Types'
-        type = block_to_block_type(markdown_block)
+        block = '# This lesson is about Block Types'
+        type = block_to_block_type(block)
         self.assertEqual(type, BlockType.HEADING)
     
     def test_block_to_code(self):
-        markdown_block = '```\nfor (let i = 0; i < 8; i++) { console.log(i) }; ```'
-        type = block_to_block_type(markdown_block)
+        block = '```\nfor (let i = 0; i < 8; i++) { console.log(i) }; ```'
+        type = block_to_block_type(block)
         self.assertEqual(type, BlockType.CODE)
     
-    def test_block_to_quote(self):
-        markdown_block = '> He said like this'
-        type = block_to_block_type(markdown_block)
+    def test_block_to_multiline_quote(self):
+        block = ">First line of quote\n>Second line of quote\n>Third line"
+        type = block_to_block_type(block)
         self.assertEqual(type, BlockType.QUOTE)
 
-    def test_block_to_unordered_list(self):
-        markdown_block = '- item1'
-        type = block_to_block_type(markdown_block)
+    def test_block_to_fake_quote(self):
+        block = ">This is a quote\nBut this line is not"
+        type = block_to_block_type(block)
+        self.assertEqual(type, BlockType.PARAGRAPH)
+
+    def test_block_to_multiline_ul(self):
+        block = "- First item\n- Second item\n- Third item"
+        type = block_to_block_type(block)
         self.assertEqual(type, BlockType.UNORDERED_LIST)
     
-    def test_block_to_ordered_list(self):
-        markdown_block = '3. You should buy...'
-        type = block_to_block_type(markdown_block)
+    def test_block_to_fake_ul(self):
+        block = "- First item\n- Second item\nThis line breaks it"
+        type = block_to_block_type(block)
+        self.assertEqual(type, BlockType.PARAGRAPH)
+
+    def test_to_multiline_ol(self):
+        block = "1. First item\n2. Second item\n3. Third item"
+        type = block_to_block_type(block)
         self.assertEqual(type, BlockType.ORDERED_LIST)
+
+    # def test_block_to_unordered_list(self):
+    #     markdown_block = '- item1'
+    #     type = block_to_block_type(markdown_block)
+    #     self.assertEqual(type, BlockType.UNORDERED_LIST)
+    
+    # def test_block_to_ordered_list(self):
+    #     markdown_block = '3. You should buy...'
+    #     type = block_to_block_type(markdown_block)
+    #     self.assertEqual(type, BlockType.ORDERED_LIST)

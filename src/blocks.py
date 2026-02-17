@@ -1,4 +1,3 @@
-import re
 from enum import Enum
 
 
@@ -17,17 +16,28 @@ def markdown_to_blocks(markdown):
     return list(blocks)
 
 
-def block_to_block_type(markdown_block):
-    if markdown_block.startswith(('# ', '## ', '### ', '#### ', '##### ', '###### ')):
+def block_to_block_type(block):
+    lines = block.split('\n')
+
+    if block.startswith(('# ', '## ', '### ', '#### ', '##### ', '###### ')):
         return BlockType.HEADING
-    elif markdown_block.startswith('```\n') and markdown_block.endswith('```'):
+    elif block.startswith('```\n') and block.endswith('```'):
         return BlockType.CODE
-    elif markdown_block.startswith('>'):
+    elif all(line.startswith('>') for line in lines):
         return BlockType.QUOTE
-    elif markdown_block.startswith('- '):
+    elif all(line.startswith('- ') for line in lines):
         return BlockType.UNORDERED_LIST
-    elif int(markdown_block.split(' ', 1)[0][0]) > 0 and markdown_block.split(' ', 1)[0][-1] == '.':
+    elif all(int(line.split(' ', 1)[0]) > 0 and line.split(' ', 1)[-1] == '.' for line in lines):
         return BlockType.ORDERED_LIST
-    else:
-        return BlockType.PARAGRAPH
+
+    # for line in lines:
+    
+    # for line in lines:
+    #     if int(block.split(' ', 1)[0][0]) > 0 and block.split(' ', 1)[0][-1] == '.':
+    #         return BlockType.ORDERED_LIST
+    #     return BlockType.PARAGRAPH
+    
+    return BlockType.PARAGRAPH
+
+        
 
