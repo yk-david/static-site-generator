@@ -17,13 +17,16 @@ def markdown_to_html_node(markdown):
             lines = ' '.join(line.split('>', 1)[-1].lstrip() for line in lines)
             block_nodes.append(ParentNode('blockquote', text_to_children(lines)))
         if block_type == BlockType.PARAGRAPH:
-            lines = ' '.join(block.split('\n'))
-            block_nodes.append(ParentNode('p', text_to_children(lines)))
+            lines = block.split('\n')
+            paragraph = ' '.join(lines)
+            block_nodes.append(ParentNode('p', text_to_children(paragraph)))
         if block_type == BlockType.CODE:
-            code_text = ''
-            if block.startswith('```\n') and block.endswith('```'):
-                code_text = block[4:-3] 
-            block_nodes.append(ParentNode('pre', [LeafNode('code', code_text)]))
+            if not block.startswith('```') or not block.endswith('```'):
+                raise ValueError('invalid code block')
+            code_text = block[4:-3] # it starts at 4 because code blocks comes with \n (line break) 
+            raw_code_text_node = TextNode(code_text, TextType.TEXT)
+            child_html_node = text_node_to_html_node(raw_code_text_node)
+            block_nodes.append(ParentNode('pre', [ParentNode('code', [child_html_node])]))
         if block_type == BlockType.UNORDERED_LIST:
             lines = block.split('\n')
             lines = (line.split(' ', 1)[-1] for line in lines if line.startswith(('- ', '* ')))
@@ -47,5 +50,9 @@ def get_heading_size(heading_block):
 
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
-    
-    return [text_node_to_html_node(node) for node in text_nodes]
+    children = []
+    for text_node in text_nodes:
+        html_node = text_node_to_html_node(text_node)
+        children.append(html_node)
+    return children
+    # return [text_node_to_html_node(node) for node in text_nodes]

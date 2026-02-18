@@ -12,8 +12,8 @@ class BlockType(Enum):
 
 def markdown_to_blocks(markdown):
     blocks = map(lambda x: x.strip(), markdown.split('\n\n'))
-
-    return list(blocks)
+    # Filter out empty blocks
+    return [block for block in blocks if block]
 
 
 def block_to_block_type(block):
