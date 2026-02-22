@@ -23,7 +23,11 @@ def copy_static():
             print(f'copying {item}...')
             shutil.copy(path, 'public')
         else:
-            path = os.path.join(path, item)
+            print(f'copying folder...', path)
+            os.makedirs(f'public/{item}')
+            src = os.listdir(f'static/{item}')
+            # print('current path:', path)
+            print('current src', src)
 
     dst = os.listdir('public')
     print('now in public folder...', dst)
