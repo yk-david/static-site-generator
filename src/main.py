@@ -1,35 +1,11 @@
 from textnode import TextType, TextNode
 import os
-import shutil
+from copy_static import initialize_public, copy_static
 
 
 def main():
     initialize_public() # Clean initialization of `public`
     copy_static(os.path.join('static'), os.path.join('public'))
-
-
-def copy_static(src_path, dst_path):
-    src = os.listdir(src_path)
-    print('now in static folder...', src)
-    
-    for item in src:
-        print('here is current source path:', src_path)
-        current_item_path = os.path.join(src_path, item)
-        if os.path.isfile(current_item_path):
-            print(f'{item} is a file. now copying...')
-            shutil.copy(current_item_path, dst_path)
-        else:
-            print(f'{item} is a folder. now copying...')
-            os.makedirs(os.path.join(dst_path, item))
-            copy_static(current_item_path, os.path.join(dst_path, item))
-            
-
-def initialize_public():
-    if os.path.exists('public'):
-        print('deleting any existing \'public\' directory...')
-        shutil.rmtree('public')
-    print('initializing \'public\' directory...')
-    os.makedirs('public')
 
 
 main()
