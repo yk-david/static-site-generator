@@ -4,31 +4,25 @@ import shutil
 
 
 def main():
-    copy_static()
-
-
-def copy_static():
     initialize_public() # Clean initialization of `public`
-    
-    current_src_path = os.path.join('static')
-    current_dst_path = os.path.join('public') # initial path
-    src = os.listdir('static') # source directory
+    copy_static(os.path.join('static'), os.path.join('public'))
+
+
+def copy_static(src_path, dst_path):
+    src = os.listdir(src_path)
     print('now in static folder...', src)
     
     for item in src:
-        print('here is current source path:', current_src_path)
-        current_item_path = os.path.join(current_src_path, item)
+        print('here is current source path:', src_path)
+        current_item_path = os.path.join(src_path, item)
         if os.path.isfile(current_item_path):
             print(f'{item} is a file. now copying...')
-            shutil.copy(current_item_path, current_dst_path)
+            shutil.copy(current_item_path, dst_path)
         else:
             print(f'{item} is a folder. now copying...')
-            os.makedirs(current_item_path)
+            os.makedirs(os.path.join(dst_path, item))
+            copy_static(current_item_path, os.path.join(dst_path, item))
             
-
-    dst = os.listdir('public')
-    print('now in public folder...', dst)
-
 
 def initialize_public():
     if os.path.exists('public'):
