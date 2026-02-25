@@ -19,8 +19,8 @@ def copy_static(src_path, dst_path):
             
 
 def initialize_public():
-    if os.path.exists('public'):
+    if os.path.exists('docs'):
         print('deleting any existing \'public\' directory...')
-        shutil.rmtree('public')
+        shutil.rmtree('docs')
     print('initializing \'public\' directory...')
-    os.makedirs('public')
+    os.makedirs('docs')
