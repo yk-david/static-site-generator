@@ -22,7 +22,7 @@ class TestParentNode(unittest.TestCase):
         parent_node = ParentNode('section', [child_node1, child_node2])
         self.assertEqual(
             parent_node.to_html(), 
-            "<section><span>child1</span><a href='https://www.freecodecamp.org'>child2</a></section>"
+            '<section><span>child1</span><a href="https://www.freecodecamp.org">child2</a></section>'
         )
     
     def test_to_html_with_great_grandchildren(self):
@@ -33,5 +33,5 @@ class TestParentNode(unittest.TestCase):
         parent_node = ParentNode('div', [child_node1, child_node2], {'class': 'container'})
         self.assertEqual(
             parent_node.to_html(), 
-            "<div class='container'><div><p><span>great grandchild</span></p></div><h2>Is it working?</h2></div>"
+            '<div class="container"><div><p><span>great grandchild</span></p></div><h2>Is it working?</h2></div>'
         )

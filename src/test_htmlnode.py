@@ -5,7 +5,7 @@ from htmlnode import HTMLNode
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html(self):
         node = HTMLNode(tag='<link>', props={'rel': 'stylesheet', 'href': './styles.css'})
-        self.assertEqual(node.props_to_html(), " rel='stylesheet' href='./styles.css'")
+        self.assertEqual(node.props_to_html(), ' rel="stylesheet" href="./styles.css"')
 
     def test_values(self):
         node = HTMLNode('div', 'I wish I could')
