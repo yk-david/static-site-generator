@@ -21,7 +21,7 @@ class HTMLNode:
             return ''
         html = ''
         for key, value in self.props.items():
-            html += f" {key}='{value}'"  
+            html += f' {key}="{value}"'  
         return html
 
     def __repr__(self):
